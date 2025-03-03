@@ -1,61 +1,38 @@
-// import styled, { css } from "styled-components";
+type ButtonSize = "small" | "medium" | "large";
+type ButtonVariation = "primary" | "secondary" | "danger";
 
-// const sizes = {
-//   small: css`
-//     font-size: 1.2rem;
-//     padding: 0.4rem 0.8rem;
-//     text-transform: uppercase;
-//     font-weight: 600;
-//     text-align: center;
-//   `,
-//   medium: css`
-//     font-size: 1.4rem;
-//     padding: 1.2rem 1.6rem;
-//     font-weight: 500;
-//   `,
-//   large: css`
-//     font-size: 1.6rem;
-//     padding: 1.2rem 2.4rem;
-//     font-weight: 500;
-//   `,
-// };
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: ButtonSize;
+  variation?: ButtonVariation;
+  children: React.ReactNode;
+}
 
-// const variations = {
-//   primary: css`
-//     color: var(--color-brand-50);
-//     background-color: var(--color-brand-600);
+function Button({
+  size = "medium",
+  variation = "primary",
+  children,
+}: ButtonProps) {
+  // 基礎樣式（適用於所有按鈕）
+  const baseStyles = "rounded-sm shadow-sm";
 
-//     &:hover {
-//       background-color: var(--color-brand-700);
-//     }
-//   `,
-//   secondary: css`
-//     color: var(--color-grey-600);
-//     background: var(--color-grey-0);
-//     border: 1px solid var(--color-grey-200);
+  // 尺寸樣式映射
+  const sizeStyles = {
+    small: "text-xs py-1 px-2 uppercase font-semibold text-center",
+    medium: "text-sm py-3 px-4 font-medium",
+    large: "text-base py-3 px-6 font-medium",
+  };
 
-//     &:hover {
-//       background-color: var(--color-grey-50);
-//     }
-//   `,
-//   danger: css`
-//     color: var(--color-red-100);
-//     background-color: var(--color-red-700);
+  // 變體樣式映射
+  const variationStyles = {
+    primary: "border-0 text-brand-50 bg-brand-600 hover:bg-brand-700",
+    secondary:
+      "text-grey-600 bg-grey-0 border border-solid border-grey-200 hover:bg-grey-50",
+    danger: "border-0 text-red-100 bg-red-700 hover:bg-red-800",
+  };
 
-//     &:hover {
-//       background-color: var(--color-red-800);
-//     }
-//   `,
-// };
-function Button({ children }: { children: React.ReactNode }) {
-  return (
-    <button
-      className="bg-brand-600 text-brand-50 hover:bg-brand-700 rounded-sm border-0 px-[1.2rem]
-        py-[1.6rem] text-[1.4rem] font-medium shadow-sm"
-    >
-      {children}
-    </button>
-  );
+  const buttonClasses = `${baseStyles} ${sizeStyles[size]} ${variationStyles[variation]}`;
+
+  return <button className={buttonClasses}>{children}</button>;
 }
 
 export default Button;

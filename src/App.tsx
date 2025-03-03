@@ -1,16 +1,29 @@
 import Button from "./ui/Button";
 import Heading from "./ui/Heading";
 import Input from "./ui/Input";
+import Row from "./ui/Row";
 
 function App() {
   return (
-    <main className="bg-[orangered] p-5">
-      <Heading type="h1">The Wild Oasis</Heading>
-      <Heading type="h2">Check in out</Heading>
-      <Button>Check in</Button>
-      <Button>Check out</Button>
-      <Heading type="h3">Form</Heading>
-      <Input />
+    <main className="p-5">
+      <Row>
+        <Row type="horizontal">
+          <Heading type="h1">The Wild Oasis</Heading>
+          <div>
+            <Heading type="h2">Check in out</Heading>
+            <Button variation='primary' size='medium' >Check in</Button>
+            <Button variation='secondary' size='small'>Check out</Button>
+          </div>
+        </Row>
+
+        <Row>
+          <Heading type="h3">Form</Heading>
+          <form>
+            <Input />
+            <Input />
+          </form>
+        </Row>
+      </Row>
     </main>
   );
 }
