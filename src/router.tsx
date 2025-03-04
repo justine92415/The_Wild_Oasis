@@ -7,46 +7,50 @@ import Users from "./pages/Users";
 import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
-
-
+import AppLayout from "./ui/AppLayout";
 
 const router = createBrowserRouter([
   {
-    index: true,
-    element: <Navigate to="/dasboard" />,
+    element: <AppLayout />,
     errorElement: <PageNotFound />,
-  },
-  {
-    path: "/dasboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "/bookings",
-    element: <Bookings />,
-  },
-  {
-    path: "/cabins",
-    element: <Cabins />,
-  },
-  {
-    path: "/users",
-    element: <Users />,
-  },
-  {
-    path: "/settings",
-    element: <Settings />,
-  },
-  {
-    path: "/account",
-    element: <Account />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "*",
-    element: <PageNotFound />,
+    children: [
+      {
+        index: true,
+        element: <Navigate replace to="/dashboard" />,
+      },
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "/bookings",
+        element: <Bookings />,
+      },
+      {
+        path: "/cabins",
+        element: <Cabins />,
+      },
+      {
+        path: "/users",
+        element: <Users />,
+      },
+      {
+        path: "/settings",
+        element: <Settings />,
+      },
+      {
+        path: "/account",
+        element: <Account />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "*",
+        element: <PageNotFound />,
+      },
+    ],
   },
 ]);
 
