@@ -1,46 +1,53 @@
-import styled from "styled-components";
+import { NavLink } from "react-router-dom";
+import {
+  HiOutlineHome,
+  HiOutlineCalendarDays,
+  HiOutlineHomeModern,
+  HiOutlineUser,
+  HiOutlineCog6Tooth,
+} from "react-icons/hi2";
 
-const NavList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-`;
+function MainNav() {
+  const navLinkStyle = `group text-grey-600 hover:text-grey-800 hover:bg-grey-50 flex items-center gap-3
+                        rounded-sm px-6 py-3 text-base font-medium transition-all duration-300`;
+  const iconStyle = `text-grey-400 group-hover:text-brand-600 group-[.active]:text-brand-600 h-6 w-6
+                     transition-colors duration-300`;
+  return (
+    <nav>
+      <ul className="flex flex-col gap-2">
+        <li>
+          <NavLink className={navLinkStyle} to="/dashboard">
+            <HiOutlineHome className={iconStyle} />
+            <span>Home</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className={navLinkStyle} to="/bookings">
+            <HiOutlineCalendarDays className={iconStyle} />
+            <span>Bookings</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className={navLinkStyle} to="/cabins">
+            <HiOutlineHomeModern className={iconStyle} />
+            <span>Cabins</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className={navLinkStyle} to="/users">
+            <HiOutlineUser className={iconStyle} />
+            <span>Users</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink className={navLinkStyle} to="/settings">
+            <HiOutlineCog6Tooth className={iconStyle} />
+            <span>Settings</span>
+          </NavLink>
+        </li>
+      </ul>
+    </nav>
+  );
+}
 
-const Link = styled.a`
-  &:link,
-  &:visited {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-
-    color: var(--color-grey-600);
-    font-size: 1.6rem;
-    font-weight: 500;
-    padding: 1.2rem 2.4rem;
-    transition: all 0.3s;
-  }
-
-  /* This works because react-router places the active class on the active NavLink */
-  &:hover,
-  &:active,
-  &.active:link,
-  &.active:visited {
-    color: var(--color-grey-800);
-    background-color: var(--color-grey-50);
-    border-radius: var(--border-radius-sm);
-  }
-
-  & svg {
-    width: 2.4rem;
-    height: 2.4rem;
-    color: var(--color-grey-400);
-    transition: all 0.3s;
-  }
-
-  &:hover svg,
-  &:active svg,
-  &.active:link svg,
-  &.active:visited svg {
-    color: var(--color-brand-600);
-  }
-`;
+export default MainNav;
