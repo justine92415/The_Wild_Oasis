@@ -9,10 +9,6 @@
     border 0.3s;
 }
 
-html {
-  /* font-size: 62.5%; */
-}
-
 body {
   font-family: "Poppins", sans-serif;
   color: @apply text-grey-700;
@@ -69,4 +65,8 @@ img {
 
   /* For dark mode */
   filter: grayscale(0) opacity(100%);
+}
+
+.active {
+  @apply text-grey-800 bg-grey-50 rounded-sm;
 }
