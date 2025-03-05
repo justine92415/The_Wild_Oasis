@@ -1,40 +1,40 @@
-import styled from "styled-components";
+// 原先的 styled-components 已移除
+// import styled from "styled-components";
 
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
+import { Cabin } from "../../types";
+import { formatCurrency } from "../../utils/helpers";
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+function CabinRow({ cabin }: { cabin: Cabin }) {
+  const { name, maxCapacity, regularPrice, discount, image } = cabin;
 
-const Img = styled.img`
-  display: block;
-  width: 6.4rem;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  object-position: center;
-  transform: scale(1.5) translateX(-7px);
-`;
+  return (
+    <div
+      className="border-grey-100 grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] items-center
+        gap-x-6 border-b px-6 py-3.5 last:border-b-0"
+    >
+      <img
+        className="block aspect-[3/2] w-16 -translate-x-2 scale-150 object-cover object-center"
+        src={image}
+        alt={name}
+      />
 
-const Cabin = styled.div`
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--color-grey-600);
-  font-family: "Sono";
-`;
+      <div className="text-grey-600 font-['Sono'] text-base font-semibold">
+        {cabin.name}
+      </div>
 
-const Price = styled.div`
-  font-family: "Sono";
-  font-weight: 600;
-`;
+      <div> Fits up tp {maxCapacity} guests </div>
 
-const Discount = styled.div`
-  font-family: "Sono";
-  font-weight: 500;
-  color: var(--color-green-700);
-`;
+      <div className="font-['Sono'] font-semibold">
+        {formatCurrency(regularPrice)}
+      </div>
+
+      <div className="font-['Sono'] font-medium text-green-700">
+        {formatCurrency(discount)}
+      </div>
+
+      <button>Delete</button>
+    </div>
+  );
+}
+
+export default CabinRow;
