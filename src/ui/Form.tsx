@@ -1,25 +1,27 @@
-import styled, { css } from "styled-components";
+import React from "react";
 
-const Form = styled.form`
-  ${(props) =>
-    props.type !== "modal" &&
-    css`
-      padding: 2.4rem 4rem;
+type FormProps = {
+  type?: "modal" | "non-modal";
+  children: React.ReactNode;
+  onSubmit?: () => void;
+};
 
-      /* Box */
-      background-color: var(--color-grey-0);
-      border: 1px solid var(--color-grey-100);
-      border-radius: var(--border-radius-md);
-    `}
+function Form({ type = "modal", children, onSubmit }: FormProps) {
+  // 根據條件組合不同的類名
+  const baseClasses = "overflow-hidden text-sm";
+  const nonModalClasses =
+    type !== "modal"
+      ? "px-10 py-6 bg-grey-0 border border-grey-100 rounded-md"
+      : "";
+  const modalClasses = type === "modal" ? "w-200" : "";
 
-  ${(props) =>
-    props.type === "modal" &&
-    css`
-      width: 80rem;
-    `}
-    
-  overflow: hidden;
-  font-size: 1.4rem;
-`;
+  const combinedClasses = `${baseClasses} ${nonModalClasses} ${modalClasses}`;
+
+  return (
+    <form onSubmit={onSubmit} className={combinedClasses}>
+      {children}
+    </form>
+  );
+}
 
 export default Form;

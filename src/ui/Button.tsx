@@ -5,11 +5,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   variation?: ButtonVariation;
   children: React.ReactNode;
+  onClick?: (...args: any) => void;
 }
 
 function Button({
   size = "medium",
   variation = "primary",
+  onClick,
   children,
 }: ButtonProps) {
   // 基礎樣式（適用於所有按鈕）
@@ -32,7 +34,11 @@ function Button({
 
   const buttonClasses = `${baseStyles} ${sizeStyles[size]} ${variationStyles[variation]}`;
 
-  return <button className={buttonClasses}>{children}</button>;
+  return (
+    <button onClick={onClick} className={buttonClasses}>
+      {children}
+    </button>
+  );
 }
 
 export default Button;

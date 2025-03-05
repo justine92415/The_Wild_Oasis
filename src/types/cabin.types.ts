@@ -6,5 +6,5 @@ export type Cabin = {
   regularPrice: number;
   discount: number;
   description: string;
-  imageUrl: string;
+  image: string;
 };

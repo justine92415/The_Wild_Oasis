@@ -52,6 +52,14 @@ export default {
         md: '7px',
         lg: '9px',
       },
+      keyframes: {
+        spinner: {
+          to: { transform: 'rotate(360deg)' },
+        }
+      },
+      animation: {
+        spinner: 'spinner 1.5s infinite linear',
+      },
     },
   },
   plugins: [],
