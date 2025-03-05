@@ -1,11 +1,35 @@
 // 原先的 styled-components 已移除
 // import styled from "styled-components";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Cabin } from "../../types";
 import { formatCurrency } from "../../utils/helpers";
+import { deleteCabin } from "../../services/apiCabins";
 
 function CabinRow({ cabin }: { cabin: Cabin }) {
-  const { name, maxCapacity, regularPrice, discount, image } = cabin;
+  const {
+    id: cabinId,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+    image,
+  } = cabin;
+
+  const queryClient = useQueryClient();
+
+  const { isPending: isDeleting, mutate } = useMutation({
+    mutationFn: (id: number) => deleteCabin(id),
+    onSuccess: () => {
+      alert('Cabin  successfully deleted');
+      queryClient.invalidateQueries({
+        queryKey: ['cabins'],
+      });
+    },
+    onError: (error) => {
+      alert('An error occurred: ' + error.message);
+    }
+  });
 
   return (
     <div
@@ -32,7 +56,7 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
         {formatCurrency(discount)}
       </div>
 
-      <button>Delete</button>
+      <button onClick={() => mutate(cabinId)} disabled={isDeleting}>Delete</button>
     </div>
   );
 }
