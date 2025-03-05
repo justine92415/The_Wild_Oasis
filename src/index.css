@@ -19,7 +19,7 @@ body {
 
   min-height: 100vh;
   line-height: 1.5;
-  font-size: 1.6rem;
+  font-size: 16px;
 }
 
 button {
@@ -69,4 +69,27 @@ img {
 
 .active {
   @apply text-grey-800 bg-grey-50 rounded-sm;
+}
+
+/* FileInput.css */
+.file-input {
+  font-size: 14px;
+  border-radius: 5px; /* 使用 borderRadius.sm 的設定 */
+}
+
+.file-input::file-selector-button {
+  font: inherit;
+  font-weight: 500;
+  padding: 8px 12px;
+  margin-right: 12px;
+  border-radius: 5px; /* 使用 borderRadius.sm 的設定 */
+  border: none;
+  color: #eef2ff; /* brand-50 */
+  background-color: #4f46e5; /* brand-600 */
+  cursor: pointer;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.file-input::file-selector-button:hover {
+  background-color: #4338ca; /* brand-700 */
 }
