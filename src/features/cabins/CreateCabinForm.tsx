@@ -10,9 +10,22 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
+import FormRow from "../../ui/FormRow";
+
+type CabinForm = {
+  name: string;
+  maxCapacity: number;
+  regularPrice: number;
+  discount: number;
+  description: string;
+  image: any;
+};
 
 function CreateCabinForm() {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, getValues, formState } =
+    useForm<CabinForm>();
+
+  const { errors } = formState;
 
   const queryClient = useQueryClient();
 
@@ -30,94 +43,91 @@ function CreateCabinForm() {
     },
   });
 
-
   function onSubmit(data: any) {
     mutate(data);
   }
 
-  return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <div
-        className="border-grey-100 grid grid-cols-[240px_1fr_1.2fr] items-center gap-6 border-b
-          py-3 first:pt-0 last:border-b-0 last:pb-0"
-      >
-        <label htmlFor="name" className="font-medium">
-          Cabin name
-        </label>
-        <Input type="text" id="name" registration={register("name")} />
-      </div>
+  function onError(errors: any) {
+    console.log(errors);
+  }
 
-      <div
-        className="border-grey-100 grid grid-cols-[240px_1fr_1.2fr] items-center gap-6 border-b
-          py-3 first:pt-0 last:border-b-0 last:pb-0"
-      >
-        <label htmlFor="maxCapacity" className="font-medium">
-          Maximum capacity
-        </label>
+  return (
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <FormRow label="Cabin name" error={errors?.name?.message}>
+        <Input
+          type="text"
+          id="name"
+          disabled={isCreating}
+          registration={register("name", {
+            required: "This field is required",
+          })}
+        />
+      </FormRow>
+
+      <FormRow label="Maximum capacity" error={errors?.maxCapacity?.message}>
         <Input
           type="number"
           id="maxCapacity"
-          registration={register("maxCapacity")}
+          disabled={isCreating}
+          registration={register("maxCapacity", {
+            required: "This field is required",
+            min: {
+              value: 1,
+              message: "Capacity should be at least 1",
+            },
+          })}
         />
-      </div>
+      </FormRow>
 
-      <div
-        className="border-grey-100 grid grid-cols-[240px_1fr_1.2fr] items-center gap-6 border-b
-          py-3 first:pt-0 last:border-b-0 last:pb-0"
-      >
-        <label htmlFor="regularPrice" className="font-medium">
-          Regular price
-        </label>
+      <FormRow label="Regular price" error={errors?.regularPrice?.message}>
         <Input
           type="number"
           id="regularPrice"
-          registration={register("regularPrice")}
+          disabled={isCreating}
+          registration={register("regularPrice", {
+            required: "This field is required",
+            min: {
+              value: 1,
+              message: "Capacity should be at least 1",
+            },
+          })}
         />
-      </div>
+      </FormRow>
 
-      <div
-        className="border-grey-100 grid grid-cols-[240px_1fr_1.2fr] items-center gap-6 border-b
-          py-3 first:pt-0 last:border-b-0 last:pb-0"
-      >
-        <label htmlFor="discount" className="font-medium">
-          Discount
-        </label>
+      <FormRow label="Discount" error={errors?.discount?.message}>
         <Input
           type="number"
           id="discount"
           defaultValue={0}
-          registration={register("discount")}
+          disabled={isCreating}
+          registration={register("discount", {
+            required: "This field is required",
+            validate: (value) =>
+              value <= getValues().regularPrice ||
+              "Discount should be less than regular price",
+          })}
         />
-      </div>
+      </FormRow>
 
-      <div
-        className="border-grey-100 grid grid-cols-[240px_1fr_1.2fr] items-center gap-6 border-b
-          py-3 first:pt-0 last:border-b-0 last:pb-0"
-      >
-        <label htmlFor="description" className="font-medium">
-          Description for website
-        </label>
+      <FormRow label="Description for website" error={errors?.description?.message}>
         <Textarea
           id="description"
           defaultValue=""
-          registration={register("description")}
+          disabled={isCreating}
+          registration={register("description", {
+            required: "This field is required",
+          })}
         />
-      </div>
+      </FormRow>
 
-      <div
-        className="border-grey-100 grid grid-cols-[240px_1fr_1.2fr] items-center gap-6 border-b
-          py-3 first:pt-0 last:border-b-0 last:pb-0"
-      >
-        <label htmlFor="image" className="font-medium">
-          Cabin photo
-        </label>
+      <FormRow label="Cabin photo" error={errors?.image?.message}>
         <FileInput
           type="file"
           id="image"
           accept="image/*"
           registration={register("image")}
         />
-      </div>
+      </FormRow>
 
       <div className="flex justify-end gap-3 py-3 first:pt-0 last:pb-0">
         {/* type is an HTML attribute! */}
