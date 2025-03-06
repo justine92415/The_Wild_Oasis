@@ -12,7 +12,7 @@ import { createCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 import FormRow from "../../ui/FormRow";
 
-type CabinForm = {
+export type CabinForm = {
   name: string;
   maxCapacity: number;
   regularPrice: number;
@@ -44,7 +44,7 @@ function CreateCabinForm() {
   });
 
   function onSubmit(data: any) {
-    mutate(data);
+    mutate({...data, image: data.image[0]});
   }
 
   function onError(errors: any) {
@@ -109,7 +109,10 @@ function CreateCabinForm() {
         />
       </FormRow>
 
-      <FormRow label="Description for website" error={errors?.description?.message}>
+      <FormRow
+        label="Description for website"
+        error={errors?.description?.message}
+      >
         <Textarea
           id="description"
           defaultValue=""
@@ -125,7 +128,9 @@ function CreateCabinForm() {
           type="file"
           id="image"
           accept="image/*"
-          registration={register("image")}
+          registration={register("image", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
