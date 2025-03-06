@@ -7,12 +7,32 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createCabin } from "../../services/apiCabins";
+import toast from "react-hot-toast";
 
 function CreateCabinForm() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending: isCreating } = useMutation({
+    mutationFn: createCabin,
+    onSuccess: () => {
+      toast.success("New cabin successfully created");
+      queryClient.invalidateQueries({
+        queryKey: ["cabins"],
+      });
+      reset();
+    },
+    onError: (error) => {
+      toast.error("Error creating new cabin");
+    },
+  });
+
 
   function onSubmit(data: any) {
-    console.log("###", data);
+    mutate(data);
   }
 
   return (
@@ -34,7 +54,11 @@ function CreateCabinForm() {
         <label htmlFor="maxCapacity" className="font-medium">
           Maximum capacity
         </label>
-        <Input type="number" id="maxCapacity" registration={register("maxCapacity")} />
+        <Input
+          type="number"
+          id="maxCapacity"
+          registration={register("maxCapacity")}
+        />
       </div>
 
       <div
@@ -44,7 +68,11 @@ function CreateCabinForm() {
         <label htmlFor="regularPrice" className="font-medium">
           Regular price
         </label>
-        <Input type="number" id="regularPrice" registration={register("regularPrice")} />
+        <Input
+          type="number"
+          id="regularPrice"
+          registration={register("regularPrice")}
+        />
       </div>
 
       <div
@@ -54,7 +82,12 @@ function CreateCabinForm() {
         <label htmlFor="discount" className="font-medium">
           Discount
         </label>
-        <Input type="number" id="discount" defaultValue={0} registration={register("discount")} />
+        <Input
+          type="number"
+          id="discount"
+          defaultValue={0}
+          registration={register("discount")}
+        />
       </div>
 
       <div
@@ -64,7 +97,11 @@ function CreateCabinForm() {
         <label htmlFor="description" className="font-medium">
           Description for website
         </label>
-        <Textarea id="description" defaultValue="" registration={register("description")} />
+        <Textarea
+          id="description"
+          defaultValue=""
+          registration={register("description")}
+        />
       </div>
 
       <div
@@ -74,7 +111,12 @@ function CreateCabinForm() {
         <label htmlFor="image" className="font-medium">
           Cabin photo
         </label>
-        <FileInput type="file" id="image" accept="image/*" registration={register("image")} />
+        <FileInput
+          type="file"
+          id="image"
+          accept="image/*"
+          registration={register("image")}
+        />
       </div>
 
       <div className="flex justify-end gap-3 py-3 first:pt-0 last:pb-0">
@@ -82,7 +124,7 @@ function CreateCabinForm() {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button>Edit cabin</Button>
+        <Button disabled={isCreating}>Edit cabin</Button>
       </div>
     </Form>
   );
