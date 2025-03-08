@@ -1,16 +1,12 @@
-// 原先的 styled-components 已移除
-// import styled from "styled-components";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Cabin } from "../../types";
 import { formatCurrency } from "../../utils/helpers";
-import { deleteCabin } from "../../services/apiCabins";
-import toast from "react-hot-toast";
 import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
+import { useDeleteCabin } from "./useDeleteCabin";
 
 function CabinRow({ cabin }: { cabin: Cabin }) {
   const [showForm, setShowForm] = useState(false);
+  const { isDeleting, deleteCabin } = useDeleteCabin();
 
   const {
     id: cabinId,
@@ -20,21 +16,6 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
     discount,
     image,
   } = cabin;
-
-  const queryClient = useQueryClient();
-
-  const { isPending: isDeleting, mutate } = useMutation({
-    mutationFn: (id: number) => deleteCabin(id),
-    onSuccess: () => {
-      toast.success("Cabin  successfully deleted");
-      queryClient.invalidateQueries({
-        queryKey: ["cabins"],
-      });
-    },
-    onError: (error) => {
-      toast.error("An error occurred: " + error.message);
-    },
-  });
 
   return (
     <>
@@ -58,14 +39,16 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
           {formatCurrency(regularPrice)}
         </div>
 
-        <div className="font-['Sono'] font-medium text-green-700">
+        {
+          discount ? <div className="font-['Sono'] font-medium text-green-700">
           {formatCurrency(discount)}
-        </div>
+        </div> : <span>&mdash;</span>
+        }
 
         <div>
           <button onClick={() => setShowForm((show) => !show)}>Edit</button>
 
-          <button onClick={() => mutate(cabinId)} disabled={isDeleting}>
+          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
             Delete
           </button>
         </div>
