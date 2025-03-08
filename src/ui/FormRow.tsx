@@ -3,7 +3,7 @@ import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 
 type FormRowProps = {
   label: string;
-  error: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
+  error?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
   children: React.ReactElement<InputHTMLAttributes<HTMLInputElement>>;
 };
 
