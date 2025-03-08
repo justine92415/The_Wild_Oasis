@@ -11,6 +11,7 @@ import { useEditCabin } from "./useEditCabin";
 
 type CreateCabinFormProps = {
   cabinToEdit?: Cabin;
+  // pass from Modal
   onCloseModal?: () => void;
 };
 
