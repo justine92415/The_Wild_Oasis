@@ -32,8 +32,7 @@ button {
 
 select:disabled,
 input:disabled {
-  background-color: @apply bg-grey-200;
-  color: @apply text-grey-500;
+  @apply bg-grey-200 text-grey-500;
 }
 
 input:focus,
