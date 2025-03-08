@@ -11,6 +11,7 @@ import { useEditCabin } from "./useEditCabin";
 
 type CreateCabinFormProps = {
   cabinToEdit?: Cabin;
+  onCloseModal?: () => void;
 };
 
 export type CabinForm = {
@@ -22,7 +23,7 @@ export type CabinForm = {
   image: any;
 };
 
-function CreateCabinForm({ cabinToEdit }: CreateCabinFormProps) {
+function CreateCabinForm({ cabinToEdit, onCloseModal }: CreateCabinFormProps) {
   const isEditSession = Boolean(cabinToEdit);
   const { id: editId, ...editValues } = cabinToEdit || {};
 
@@ -49,6 +50,7 @@ function CreateCabinForm({ cabinToEdit }: CreateCabinFormProps) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         },
       );
@@ -56,6 +58,7 @@ function CreateCabinForm({ cabinToEdit }: CreateCabinFormProps) {
       createCabin(newCabin, {
         onSuccess: () => {
           reset();
+          onCloseModal?.();
         },
       });
     }
@@ -149,7 +152,7 @@ function CreateCabinForm({ cabinToEdit }: CreateCabinFormProps) {
       </FormRow>
 
       <div className="flex justify-end gap-3 py-3 first:pt-0 last:pb-0">
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" onClick={() => onCloseModal?.()}>
           Cancel
         </Button>
         <Button disabled={isWorking}>
