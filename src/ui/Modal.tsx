@@ -1,6 +1,14 @@
-import { cloneElement, createContext, useContext, useState } from "react";
+import {
+  cloneElement,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 type ModalContextType = {
   openName: string;
@@ -46,6 +54,9 @@ type ModalProps = {
 
 function Window({ children, name }: ModalProps) {
   const { openName, close } = useContext(ModalContext);
+
+  const ref = useOutsideClick<HTMLDivElement>(close);
+  
   if (name !== openName) return null;
 
   return createPortal(
@@ -56,6 +67,7 @@ function Window({ children, name }: ModalProps) {
       <div
         className="bg-grey-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform
           rounded-lg p-8 shadow-lg transition-all duration-500"
+        ref={ref}
       >
         <button
           onClick={close}
