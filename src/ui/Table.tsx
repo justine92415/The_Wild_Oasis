@@ -1,60 +1,89 @@
-import styled from "styled-components";
+import { createContext, useContext } from "react";
 
-const StyledTable = styled.div`
-  border: 1px solid var(--color-grey-200);
+type CommonTableProps = {
+  columns: string;
+  children: React.ReactNode;
+};
 
-  font-size: 1.4rem;
-  background-color: var(--color-grey-0);
-  border-radius: 7px;
-  overflow: hidden;
-`;
+type TableBodyProps<T> = {
+  data: T[];
+  render: (item: T) => React.ReactNode;
+};
 
-const CommonRow = styled.div`
-  display: grid;
-  grid-template-columns: ${(props) => props.columns};
-  column-gap: 2.4rem;
-  align-items: center;
-  transition: none;
-`;
+type TableContext = {
+  columns: string | undefined;
+};
 
-const StyledHeader = styled(CommonRow)`
-  padding: 1.6rem 2.4rem;
+const TableContext = createContext<TableContext>({ columns: undefined });
 
-  background-color: var(--color-grey-50);
-  border-bottom: 1px solid var(--color-grey-100);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  font-weight: 600;
-  color: var(--color-grey-600);
-`;
+function Table({ columns, children }: CommonTableProps) {
+  return (
+    <TableContext.Provider value={{ columns }}>
+      <div
+        role="table"
+        className="border-grey-200 bg-grey-0 overflow-hidden rounded-md border text-sm"
+      >
+        {children}
+      </div>
+    </TableContext.Provider>
+  );
+}
 
-const StyledRow = styled(CommonRow)`
-  padding: 1.2rem 2.4rem;
+// The Header component
+function Header({ children }: { children: React.ReactNode }) {
+  const { columns } = useContext(TableContext);
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+  return (
+    <header
+      role="row"
+      className="bg-grey-50 border-grey-100 text-grey-600 grid items-center gap-x-6 border-b px-6
+        py-4 font-semibold tracking-[0.4px] uppercase transition-none"
+      style={{ gridTemplateColumns: columns }}
+    >
+      {children}
+    </header>
+  );
+}
 
-const StyledBody = styled.section`
-  margin: 0.4rem 0;
-`;
+// The Row component
+function Row({ children }: { children: React.ReactNode }) {
+  const { columns } = useContext(TableContext);
+  return (
+    <div
+      role="row"
+      className="[&:not(:last-child)]:border-grey-100 grid items-center gap-x-6 px-6 py-3
+        transition-none [&:not(:last-child)]:border-b"
+      style={{ gridTemplateColumns: columns }}
+    >
+      {children}
+    </div>
+  );
+}
 
-const Footer = styled.footer`
-  background-color: var(--color-grey-50);
-  display: flex;
-  justify-content: center;
-  padding: 1.2rem;
+// The Body component
+function Body<T>({ data, render }: TableBodyProps<T>) {
+  if (data.length === 0) return <EmptyState>No data to show at the moment</EmptyState>;
+  return <section className="my-1">{data.map(render)}</section>;
+}
 
-  /* This will hide the footer when it contains no child elements. Possible thanks to the parent selector :has 🎉 */
-  &:not(:has(*)) {
-    display: none;
-  }
-`;
+// The TableFooter component
+function Footer({ children }: { children: React.ReactNode }) {
+  return (
+    <footer className="bg-grey-50 flex justify-center p-3 [&:empty]:hidden">
+      {children}
+    </footer>
+  );
+}
 
-const Empty = styled.p`
-  font-size: 1.6rem;
-  font-weight: 500;
-  text-align: center;
-  margin: 2.4rem;
-`;
+// Empty state component
+function EmptyState({ children }: { children: React.ReactNode }) {
+  return <p className="m-6 text-center text-base font-medium">{children}</p>;
+}
+
+Table.Header = Header;
+Table.Row = Row;
+Table.Body = Body;
+Table.Footer = Footer;
+Table.Empty = EmptyState;
+
+export default Table;

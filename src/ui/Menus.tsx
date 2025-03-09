@@ -1,62 +1,153 @@
-import styled from "styled-components";
+import { createContext, ReactNode, useContext, useState } from "react";
+import { createPortal } from "react-dom";
+import { HiEllipsisVertical } from "react-icons/hi2";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
-const StyledMenu = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-`;
+// Define types for the components
+type MenusContextType = {
+  openId: number | null;
+  close: () => void;
+  open: (id: number) => void;
+  position: Position | null;
+  setPosition: (position: Position) => void;
+};
+type Position = { x: number; y: number };
 
-const StyledToggle = styled.button`
-  background: none;
-  border: none;
-  padding: 0.4rem;
-  border-radius: var(--border-radius-sm);
-  transform: translateX(0.8rem);
-  transition: all 0.2s;
+type MenusProps = {
+  children: ReactNode;
+};
 
-  &:hover {
-    background-color: var(--color-grey-100);
+type MenuProps = {
+  children: ReactNode;
+};
+
+type ToggleProps = {
+  id: number;
+};
+
+type ListProps = {
+  id: number;
+  children: ReactNode;
+  position?: Position;
+};
+
+type ButtonProps = {
+  children: ReactNode;
+  onClick?: () => void;
+  icon: ReactNode;
+};
+
+// Create context for menu functionality
+const MenusContext = createContext<MenusContextType>({
+  openId: null,
+  close: () => {},
+  open: () => {},
+  position: null,
+  setPosition: () => {},
+});
+
+function Menus({ children }: MenusProps) {
+  const [openId, setOpenId] = useState<number | null>(null);
+  const [position, setPosition] = useState<Position | null>(null);
+  const close = () => setOpenId(null);
+  const open = setOpenId;
+
+  return (
+    <MenusContext.Provider
+      value={{
+        openId,
+        close,
+        open,
+        position,
+        setPosition,
+      }}
+    >
+      {children}
+    </MenusContext.Provider>
+  );
+}
+
+function Menu({ children }: MenuProps) {
+  return <div className="flex items-center justify-end">{children}</div>;
+}
+
+function Toggle({ id }: ToggleProps) {
+  const { openId, close, open, setPosition } =
+    useContext<MenusContextType>(MenusContext);
+
+  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+    const rect = (e.target as Element)
+      .closest("button")!
+      .getBoundingClientRect();
+    setPosition({
+      x: window.innerWidth - rect.width - rect.x,
+      y: rect.y + rect.height + 8,
+    });
+
+    openId === null || openId !== id ? open(id) : close();
   }
 
-  & svg {
-    width: 2.4rem;
-    height: 2.4rem;
-    color: var(--color-grey-700);
+  return (
+    <button
+      className="hover:bg-grey-100 translate-x-2 rounded-sm border-0 bg-transparent p-1
+        transition-all duration-200"
+      onClick={handleClick}
+    >
+      <span className="[&>svg]:text-grey-700 [&>svg]:h-6 [&>svg]:w-6">
+        <HiEllipsisVertical />
+      </span>
+    </button>
+  );
+}
+
+function List({ id, children }: ListProps) {
+  const { openId, position, close } = useContext<MenusContextType>(MenusContext);
+  const ref = useOutsideClick<HTMLUListElement>(close);
+
+  if (openId !== id) return null;
+
+  return createPortal(
+    <ul
+      ref={ref}
+      className="bg-grey-0 fixed rounded-md shadow-md"
+      style={{
+        right: `${position?.x}px`,
+        top: `${position?.y}px`,
+      }}
+    >
+      {children}
+    </ul>,
+    document.body,
+  );
+}
+
+function Button({ children, icon, onClick }: ButtonProps) {
+  const { close } = useContext<MenusContextType>(MenusContext);
+  
+  function handleClick() {
+    onClick?.();
+    close();
   }
-`;
 
-const StyledList = styled.ul`
-  position: fixed;
+  return (
+    <li>
+      <button
+        className="hover:bg-grey-50 [&>svg]:text-grey-400 flex w-full items-center gap-4 border-0
+          bg-transparent px-6 py-3 text-left text-sm transition-all duration-200
+          [&>svg]:h-3 [&>svg]:w-3 [&>svg]:transition-all [&>svg]:duration-300"
+        onClick={handleClick}
+      >
+        {icon}
+        <span>{children}</span>
+      </button>
+    </li>
+  );
+}
 
-  background-color: var(--color-grey-0);
-  box-shadow: var(--shadow-md);
-  border-radius: var(--border-radius-md);
+// Add types to the composed components
+Menus.Menu = Menu;
+Menus.Toggle = Toggle;
+Menus.List = List;
+Menus.Button = Button;
 
-  right: ${(props) => props.position.x}px;
-  top: ${(props) => props.position.y}px;
-`;
-
-const StyledButton = styled.button`
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: none;
-  padding: 1.2rem 2.4rem;
-  font-size: 1.4rem;
-  transition: all 0.2s;
-
-  display: flex;
-  align-items: center;
-  gap: 1.6rem;
-
-  &:hover {
-    background-color: var(--color-grey-50);
-  }
-
-  & svg {
-    width: 1.6rem;
-    height: 1.6rem;
-    color: var(--color-grey-400);
-    transition: all 0.3s;
-  }
-`;
+export default Menus;
