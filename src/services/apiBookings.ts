@@ -2,14 +2,19 @@ import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
 type getBokkingsParams = {
-  filter?: BaseOption | null;
-  sortBy?: BaseOption | null;
+  filter?: FilterOption | null;
+  sortBy?: SortByOption | null;
 };
 
-type BaseOption = {
+type FilterOption = {
   field: string;
-  value: string | number;
+  value?: string | number;
   method?: string;
+};
+
+type SortByOption = {
+  field: string;
+  direction: string;
 };
 
 export async function getBookings({
@@ -22,8 +27,13 @@ export async function getBookings({
       "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)",
     );
 
-  if (!!filter &&  filter !== null) {
-    query = (query as any)[filter.method || 'eq'](filter.field, filter.value);
+  // FILTER
+  if (filter) {
+    query = (query as any)[filter.method || "eq"](filter.field, filter.value);
+  }
+
+  if (sortBy) {
+    query = query.order(sortBy.field, { ascending: sortBy.direction === "asc" });
   }
 
   const { data, error } = await query;
