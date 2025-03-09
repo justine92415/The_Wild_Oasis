@@ -6,6 +6,7 @@ import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import { useCreateCabin } from "./useCreateCabin";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+import Table from "../../ui/Table";
 
 function CabinRow({ cabin }: { cabin: Cabin }) {
   const { isCreating, createCabin } = useCreateCabin();
@@ -33,10 +34,7 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
   }
 
   return (
-    <div
-      className="border-grey-100 grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] items-center
-        gap-x-6 border-b px-6 py-3.5 last:border-b-0"
-    >
+    <Table.Row>
       <img
         className="block aspect-[3/2] w-16 -translate-x-2 scale-150 object-cover object-center"
         src={image}
@@ -78,12 +76,12 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
         </Modal>
 
         <Modal>
-          <Modal.Open opens="confirmDelete">
+          <Modal.Open opens="delete">
             <button>
               <HiTrash />
             </button>
           </Modal.Open>
-          <Modal.Window name="confirmDelete">
+          <Modal.Window name="delete">
             <ConfirmDelete
               resourceName="cabins"
               onConfirm={() => deleteCabin(cabinId)}
@@ -92,7 +90,7 @@ function CabinRow({ cabin }: { cabin: Cabin }) {
           </Modal.Window>
         </Modal>
       </div>
-    </div>
+    </Table.Row>
   );
 }
 
