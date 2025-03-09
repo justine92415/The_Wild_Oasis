@@ -1,12 +1,32 @@
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings(): Promise<any> {
-  const { data, error } = await supabase
+type getBokkingsParams = {
+  filter?: BaseOption | null;
+  sortBy?: BaseOption | null;
+};
+
+type BaseOption = {
+  field: string;
+  value: string | number;
+  method?: string;
+};
+
+export async function getBookings({
+  filter,
+  sortBy,
+}: getBokkingsParams): Promise<any> {
+  let query = supabase
     .from("bookings")
     .select(
       "id, created_at, startDate, endDate, numNights, numGuests, status, totalPrice, cabins(name), guests(fullName, email)",
     );
+
+  if (!!filter &&  filter !== null) {
+    query = (query as any)[filter.method || 'eq'](filter.field, filter.value);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error(error);
