@@ -1,15 +1,35 @@
-import styled from "styled-components";
+import { SelectHTMLAttributes } from "react";
 
-const StyledSelect = styled.select`
-  font-size: 1.4rem;
-  padding: 0.8rem 1.2rem;
-  border: 1px solid
-    ${(props) =>
-      props.type === "white"
-        ? "var(--color-grey-100)"
-        : "var(--color-grey-300)"};
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-grey-0);
-  font-weight: 500;
-  box-shadow: var(--shadow-sm);
-`;
+type SelectProps = {
+  type?: "white" | "default";
+  options: Option[];
+} & SelectHTMLAttributes<HTMLSelectElement>;
+
+type Option = {
+  value: string;
+  label: string;
+};
+
+function Select({
+  options,
+  type = "default",
+  className = "",
+  ...props
+}: SelectProps) {
+  return (
+    <select
+      className={`border border-solid px-3 py-2 text-sm ${
+        type === "white" ? "border-grey-100" : "border-grey-300" } bg-grey-0 rounded-sm
+        font-medium shadow-sm ${className}`}
+      {...props}
+    >
+      {options.map((option) => (
+        <option value={option.value} key={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+export default Select;

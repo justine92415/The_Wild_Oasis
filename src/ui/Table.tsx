@@ -51,8 +51,9 @@ function Row({ children }: { children: React.ReactNode }) {
   return (
     <div
       role="row"
-      className="[&:not(:last-child)]:border-grey-100 grid items-center gap-x-6 px-6 py-3
-        transition-none [&:not(:last-child)]:border-b"
+      className="grid items-center gap-x-6 px-6 py-3 relative
+        after:content-[''] after:absolute after:left-6 after:right-6 after:bottom-0 
+        after:h-px after:bg-grey-100 last:after:hidden"
       style={{ gridTemplateColumns: columns }}
     >
       {children}
@@ -62,7 +63,8 @@ function Row({ children }: { children: React.ReactNode }) {
 
 // The Body component
 function Body<T>({ data, render }: TableBodyProps<T>) {
-  if (data.length === 0) return <EmptyState>No data to show at the moment</EmptyState>;
+  if (data.length === 0)
+    return <EmptyState>No data to show at the moment</EmptyState>;
   return <section className="my-1">{data.map(render)}</section>;
 }
 
