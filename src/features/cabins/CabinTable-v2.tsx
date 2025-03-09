@@ -1,6 +1,6 @@
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
-import { useCabin } from "./useCabin";
+import { useCabin } from "./useCabins";
 
 function CabinTable() {
   const { isLoading, cabins } = useCabin();

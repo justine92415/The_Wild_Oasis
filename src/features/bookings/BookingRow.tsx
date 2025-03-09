@@ -1,84 +1,66 @@
-import styled from "styled-components";
 import { format, isToday } from "date-fns";
-
-import Tag from "../../ui/Tag";
 import Table from "../../ui/Table";
-
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
+import { Booking } from "../../types";
 
-const Cabin = styled.div`
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--color-grey-600);
-  font-family: "Sono";
-`;
+export type BookingRowProps = {
+  booking: Booking;
+};
 
-const Stacked = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-
-  & span:first-child {
-    font-weight: 500;
-  }
-
-  & span:last-child {
-    color: var(--color-grey-500);
-    font-size: 1.2rem;
-  }
-`;
-
-const Amount = styled.div`
-  font-family: "Sono";
-  font-weight: 500;
-`;
-
-function BookingRow({
-  booking: {
-    id: bookingId,
-    created_at,
-    startDate,
-    endDate,
-    numNights,
-    numGuests,
-    totalPrice,
-    status,
-    guests: { fullName: guestName, email },
-    cabins: { name: cabinName },
-  },
-}) {
-  const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
-  };
-
+function BookingRow({ booking: {
+  cabins: { name: cabinName },
+  guests: { fullName: guestName, email },
+  startDate,
+  endDate,
+  numNights,
+  status,
+  totalPrice,
+} }: BookingRowProps) {
   return (
     <Table.Row>
-      <Cabin>{cabinName}</Cabin>
+      {/* Cabin: font-size 1.6rem, font-weight 600, color grey-600, font-family "Sono" */}
+      <div className="text-grey-600 font-['Sono'] text-base font-semibold">
+        {cabinName}
+      </div>
 
-      <Stacked>
-        <span>{guestName}</span>
-        <span>{email}</span>
-      </Stacked>
+      {/* Stacked: flex column with gap */}
+      <div className="flex flex-col gap-0.5">
+        <span className="font-medium">{guestName}</span>
+        <span className="text-grey-500 text-xs">{email}</span>
+      </div>
 
-      <Stacked>
-        <span>
+      {/* Stacked */}
+      <div className="flex flex-col gap-0.5">
+        <span className="font-medium">
           {isToday(new Date(startDate))
             ? "Today"
             : formatDistanceFromNow(startDate)}{" "}
           &rarr; {numNights} night stay
         </span>
-        <span>
+        <span className="text-grey-500 text-xs">
           {format(new Date(startDate), "MMM dd yyyy")} &mdash;{" "}
           {format(new Date(endDate), "MMM dd yyyy")}
         </span>
-      </Stacked>
+      </div>
 
-      <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+      {/* Tag */}
+      <span
+        className={`w-fit rounded-full px-3 py-1 text-[11px] font-semibold uppercase ${
+          status === "unconfirmed"
+            ? "bg-blue-100 text-blue-700"
+            : status === "checked-in"
+              ? "bg-green-100 text-green-700"
+              : "text-silver-700 bg-silver-100"
+          }`}
+      >
+        {status.replace("-", " ")}
+      </span>
 
-      <Amount>{formatCurrency(totalPrice)}</Amount>
+      {/* Amount */}
+      <div className="font-['Sono'] font-medium">
+        {formatCurrency(totalPrice)}
+      </div>
     </Table.Row>
   );
 }
