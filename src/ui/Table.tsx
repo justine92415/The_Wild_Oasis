@@ -5,6 +5,11 @@ type CommonTableProps = {
   children: React.ReactNode;
 };
 
+type TableBodyProps<T> = {
+  data: T[];
+  render: (item: T) => React.ReactNode;
+};
+
 type TableContext = {
   columns: string | undefined;
 };
@@ -25,7 +30,7 @@ function Table({ columns, children }: CommonTableProps) {
 }
 
 // The Header component
-function Header({ children }: any) {
+function Header({ children }: { children: React.ReactNode }) {
   const { columns } = useContext(TableContext);
 
   return (
@@ -41,7 +46,7 @@ function Header({ children }: any) {
 }
 
 // The Row component
-function Row({ children }: any) {
+function Row({ children }: { children: React.ReactNode }) {
   const { columns } = useContext(TableContext);
   return (
     <div
@@ -56,8 +61,9 @@ function Row({ children }: any) {
 }
 
 // The Body component
-function Body({ children }: { children: React.ReactNode }) {
-  return <section className="my-1">{children}</section>;
+function Body<T>({ data, render }: TableBodyProps<T>) {
+  if (data.length === 0) return <EmptyState>No data to show at the moment</EmptyState>;
+  return <section className="my-1">{data.map(render)}</section>;
 }
 
 // The TableFooter component

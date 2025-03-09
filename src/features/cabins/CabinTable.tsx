@@ -1,3 +1,4 @@
+import { Cabin } from "../../types";
 import Spinner from "../../ui/Spinner";
 import Table from "../../ui/Table";
 import CabinRow from "./CabinRow";
@@ -18,7 +19,7 @@ function CabinTable() {
         <div>Discount</div>
         <div></div>
       </Table.Header>
-      {cabins?.map((cabin) => <CabinRow key={cabin.id} cabin={cabin} />)}
+      <Table.Body data={cabins!} render={(cabin: Cabin) => <CabinRow key={cabin.id} cabin={cabin} />} />
     </Table>
   );
 }
