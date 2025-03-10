@@ -1,57 +1,66 @@
-import styled from "styled-components";
+import { ReactNode } from "react";
+import { useSearchParams } from "react-router-dom";
 
-const StyledPagination = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
+type PaginationProps = {
+  count: number;
+};
 
-const P = styled.p`
-  font-size: 1.4rem;
-  margin-left: 0.8rem;
+const PAGE_SIZE = 10;
 
-  & span {
-    font-weight: 600;
+function Pagination({ count }: PaginationProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentPage = !searchParams.get("page") ? 1 : searchParams.get("page")!;
+
+  const pageCount = Math.ceil(count / PAGE_SIZE);
+
+  function nextPage(){
+    const next =  currentPage === pageCount ? pageCount : +currentPage + 1;
+
+    searchParams.set("page", next.toString());
+    setSearchParams(searchParams);
   }
-`;
+  function prevPage(){
+    const prev = currentPage === 1 ? currentPage : +currentPage - 1;
 
-const Buttons = styled.div`
-  display: flex;
-  gap: 0.6rem;
-`;
-
-const PaginationButton = styled.button`
-  background-color: ${(props) =>
-    props.active ? " var(--color-brand-600)" : "var(--color-grey-50)"};
-  color: ${(props) => (props.active ? " var(--color-brand-50)" : "inherit")};
-  border: none;
-  border-radius: var(--border-radius-sm);
-  font-weight: 500;
-  font-size: 1.4rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  padding: 0.6rem 1.2rem;
-  transition: all 0.3s;
-
-  &:has(span:last-child) {
-    padding-left: 0.4rem;
+    searchParams.set("page", prev.toString());
+    setSearchParams(searchParams);
   }
 
-  &:has(span:first-child) {
-    padding-right: 0.4rem;
-  }
+  if (pageCount < 1) return null;
+  
+  return (
+    <div className="flex w-full items-center justify-between">
+      <p className="ml-2 text-sm">
+        Showing <span>{(+currentPage - 1) * PAGE_SIZE + 1}</span> to <span>{ currentPage === pageCount ? count : (+currentPage) * PAGE_SIZE }</span> of <span>{count}</span> results
+      </p>
 
-  & svg {
-    height: 1.8rem;
-    width: 1.8rem;
-  }
+      <div className="flex gap-1.5">
+        <button
+          onClick={prevPage}
+          disabled={+currentPage === 1}
+          className={` ${true ? "bg-brand-600 text-brand-50" : "bg-grey-50 text-inherit"}
+            hover:enabled:bg-brand-600 hover:enabled:text-brand-50 flex items-center
+            justify-center gap-1 rounded-sm border-none px-3 py-1.5 text-sm font-medium
+            transition-all duration-300 has-[span:first-child]:pr-1
+            has-[span:last-child]:pl-1`}
+        >
+          <span> Previous </span>
+        </button>
+        <button
+          onClick={nextPage}
+          disabled={+currentPage === pageCount}
+          className={` ${true ? "bg-brand-600 text-brand-50" : "bg-grey-50 text-inherit"}
+            hover:enabled:bg-brand-600 hover:enabled:text-brand-50 flex items-center
+            justify-center gap-1 rounded-sm border-none px-3 py-1.5 text-sm font-medium
+            transition-all duration-300 has-[span:first-child]:pr-1
+            has-[span:last-child]:pl-1`}
+        >
+          <span> Next </span>
+        </button>
+      </div>
+    </div>
+  );
+}
 
-  &:hover:not(:disabled) {
-    background-color: var(--color-brand-600);
-    color: var(--color-brand-50);
-  }
-`;
+export default Pagination;

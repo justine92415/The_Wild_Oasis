@@ -15,7 +15,7 @@ export function useBookings() {
 
   // SORT
   const sortByRaw = searchParams.get("sortBy");
-  const [field, direction] = sortByRaw?.split("-") || [];
+  const [field, direction] = sortByRaw?.split("-") || ['startDate', 'desc'];
   const sortBy = { field, direction };
 
   const {

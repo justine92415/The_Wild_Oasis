@@ -6,6 +6,7 @@ import Table from "../../ui/Table";
 import CabinRow from "./CabinRow";
 import { useCabin } from "./useCabins";
 import Empty from "../../ui/Empty";
+import Pagination from "../../ui/Pagination";
 
 function CabinTable() {
   const { isLoading, cabins } = useCabin();
