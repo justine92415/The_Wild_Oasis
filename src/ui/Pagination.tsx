@@ -1,11 +1,9 @@
-import { ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
+import { PAGE_SIZE } from "../utils/constants";
 
 type PaginationProps = {
   count: number;
 };
-
-const PAGE_SIZE = 10;
 
 function Pagination({ count }: PaginationProps) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,7 +30,7 @@ function Pagination({ count }: PaginationProps) {
   return (
     <div className="flex w-full items-center justify-between">
       <p className="ml-2 text-sm">
-        Showing <span>{(+currentPage - 1) * PAGE_SIZE + 1}</span> to <span>{ currentPage === pageCount ? count : (+currentPage) * PAGE_SIZE }</span> of <span>{count}</span> results
+        Showing <span>{(+currentPage - 1) * PAGE_SIZE + 1}</span> to <span>{ +currentPage === pageCount ? count : (+currentPage) * PAGE_SIZE }</span> of <span>{count}</span> results
       </p>
 
       <div className="flex gap-1.5">
