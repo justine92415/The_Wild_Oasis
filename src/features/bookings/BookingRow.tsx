@@ -3,20 +3,28 @@ import Table from "../../ui/Table";
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import { Booking } from "../../types";
+import Menus from "../../ui/Menus";
+import { HiEye } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 export type BookingRowProps = {
   booking: Booking;
 };
 
-function BookingRow({ booking: {
-  cabins: { name: cabinName },
-  guests: { fullName: guestName, email },
-  startDate,
-  endDate,
-  numNights,
-  status,
-  totalPrice,
-} }: BookingRowProps) {
+function BookingRow({
+  booking: {
+    id: bookingId,
+    cabins: { name: cabinName },
+    guests: { fullName: guestName, email },
+    startDate,
+    endDate,
+    numNights,
+    status,
+    totalPrice,
+  },
+}: BookingRowProps) {
+  const navigate = useNavigate();
+
   return (
     <Table.Row>
       {/* Cabin: font-size 1.6rem, font-weight 600, color grey-600, font-family "Sono" */}
@@ -61,6 +69,18 @@ function BookingRow({ booking: {
       <div className="font-['Sono'] font-medium">
         {formatCurrency(totalPrice)}
       </div>
+
+      <Menus.Menu>
+        <Menus.Toggle id={+bookingId} />
+        <Menus.List id={+bookingId}>
+          <Menus.Button
+            icon={<HiEye />}
+            onClick={() => navigate(`/bookings/${bookingId}`)}
+          >
+            See details
+          </Menus.Button>
+        </Menus.List>
+      </Menus.Menu>
     </Table.Row>
   );
 }

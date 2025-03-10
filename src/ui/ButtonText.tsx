@@ -1,18 +1,17 @@
-import styled from 'styled-components';
+type ButtonTextProps = {
+  children: React.ReactNode;
+  onClick?: () => void;
+};
 
-const ButtonText = styled.button`
-  color: var(--color-brand-600);
-  font-weight: 500;
-  text-align: center;
-  transition: all 0.3s;
-  background: none;
-  border: none;
-  border-radius: var(--border-radius-sm);
-
-  &:hover,
-  &:active {
-    color: var(--color-brand-700);
-  }
-`;
+function ButtonText({ children, onClick }: ButtonTextProps) {
+  return (
+    <button 
+      onClick={onClick}
+      className="text-brand-600 font-medium text-center transition-all duration-300 bg-transparent border-0 rounded-sm hover:text-brand-700 active:text-brand-700"
+    >
+      {children}
+    </button>
+  );
+}
 
 export default ButtonText;

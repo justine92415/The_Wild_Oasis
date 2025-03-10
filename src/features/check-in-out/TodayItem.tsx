@@ -1,20 +1,19 @@
-import styled from "styled-components";
+type TodayItemProps = {
+  children: React.ReactNode;
+}
 
-const StyledTodayItem = styled.li`
-  display: grid;
-  grid-template-columns: 9rem 2rem 1fr 7rem 9rem;
-  gap: 1.2rem;
-  align-items: center;
+function TodayItem({ children }: TodayItemProps) {
+  return (
+    <li className="grid grid-cols-[9rem_2rem_1fr_7rem_9rem] gap-3 items-center text-sm py-2 border-b border-grey-100 first:border-t first:border-grey-100">
+      {children}
+    </li>
+  );
+}
 
-  font-size: 1.4rem;
-  padding: 0.8rem 0;
-  border-bottom: 1px solid var(--color-grey-100);
+function Guest({ children }: { children: React.ReactNode }) {
+  return <div className="font-medium">{children}</div>;
+}
 
-  &:first-child {
-    border-top: 1px solid var(--color-grey-100);
-  }
-`;
+TodayItem.Guest = Guest;
 
-const Guest = styled.div`
-  font-weight: 500;
-`;
+export default TodayItem;

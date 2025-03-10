@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import BookingDataBox from "../bookings/BookingDataBox";
 
 import Row from "../../ui/Row";
@@ -8,14 +7,6 @@ import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
-
-const Box = styled.div`
-  /* Box */
-  background-color: var(--color-grey-0);
-  border: 1px solid var(--color-grey-100);
-  border-radius: var(--border-radius-md);
-  padding: 2.4rem 4rem;
-`;
 
 function CheckinBooking() {
   const moveBack = useMoveBack();
@@ -41,6 +32,10 @@ function CheckinBooking() {
       </Row>
 
       <BookingDataBox booking={booking} />
+
+      <div className="bg-grey-0 border border-grey-100 rounded-md p-6 px-16">
+        {/* 此處是轉換後的 Box 元件 */}
+      </div>
 
       <ButtonGroup>
         <Button onClick={handleCheckin}>Check in booking #{bookingId}</Button>
