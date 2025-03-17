@@ -14,6 +14,7 @@ function Button({
   onClick,
   children,
   type = "submit",
+  disabled
 }: ButtonProps) {
   // 基礎樣式（適用於所有按鈕）
   const baseStyles = "rounded-sm shadow-sm";
@@ -36,7 +37,7 @@ function Button({
   const buttonClasses = `${baseStyles} ${sizeStyles[size]} ${variationStyles[variation]}`;
 
   return (
-    <button type={type} onClick={onClick} className={buttonClasses}>
+    <button type={type} onClick={onClick} className={buttonClasses} disabled={disabled}>
       {children}
     </button>
   );

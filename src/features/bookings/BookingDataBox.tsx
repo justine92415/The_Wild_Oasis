@@ -7,12 +7,38 @@ import {
 } from "react-icons/hi2";
 
 import DataItem from "../../ui/DataItem";
-// import { Flag } from "../../ui/Flag";
 
 import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import { Flag } from "../../ui/Flag";
+
+export type BookingDataBoxProps = {
+  booking: {
+    created_at: string;
+    startDate: string;
+    endDate: string;
+    numNights: number;
+    numGuests: number;
+    cabinPrice: number;
+    extrasPrice: number;
+    totalPrice: number;
+    hasBreakfast: boolean;
+    observations: string;
+    isPaid: boolean;
+    guests: {
+      fullName: string;
+      email: string;
+      country: string;
+      countryFlag: string;
+      nationalID: string;
+    };
+    cabins: {
+      name: string;
+    };
+  };
+};
 
 // A purely presentational component
-function BookingDataBox({ booking }) {
+function BookingDataBox({ booking }: BookingDataBoxProps) {
   const {
     created_at,
     startDate,
@@ -30,12 +56,16 @@ function BookingDataBox({ booking }) {
   } = booking;
 
   return (
-    <section className="bg-grey-0 border border-grey-100 rounded-md overflow-hidden">
-      <header className="bg-brand-500 px-10 py-5 text-indigo-100 text-lg font-medium flex items-center justify-between">
-        <div className="flex items-center gap-4 font-semibold text-lg">
+    <section className="bg-grey-0 border-grey-100 overflow-hidden rounded-md border">
+      <header
+        className="bg-brand-500 flex items-center justify-between px-10 py-5 text-lg font-medium
+          text-indigo-100"
+      >
+        <div className="flex items-center gap-4 text-lg font-semibold">
           <HiOutlineHomeModern className="h-8 w-8" />
           <p>
-            {numNights} nights in Cabin <span className="font-sono text-xl ml-1">{cabinName}</span>
+            {numNights} nights in Cabin{" "}
+            <span className="font-sono ml-1 text-xl">{cabinName}</span>
           </p>
         </div>
 
@@ -48,10 +78,10 @@ function BookingDataBox({ booking }) {
         </p>
       </header>
 
-      <section className="pt-8 pb-3 px-10">
-        <div className="flex items-center gap-3 mb-4 text-grey-500">
-          {/* {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />} */}
-          <p className="font-medium text-grey-700">
+      <section className="px-10 pt-8 pb-3">
+        <div className="text-grey-500 mb-4 flex items-center gap-3">
+          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
+          <p className="text-grey-700 font-medium">
             {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
           </p>
           <span>&bull;</span>
@@ -69,25 +99,36 @@ function BookingDataBox({ booking }) {
           </DataItem>
         )}
 
-        <DataItem icon={<HiOutlineCheckCircle />} label="Breakfast included?">
+        <DataItem
+          icon={<HiOutlineCheckCircle className="text-brand-600 h-5 w-5" />}
+          label="Breakfast included?"
+        >
           {hasBreakfast ? "Yes" : "No"}
         </DataItem>
 
-        <div className={`flex items-center justify-between px-8 py-4 rounded-sm mt-6 ${isPaid ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
-          <DataItem icon={<HiOutlineCurrencyDollar className="h-6 w-6 text-current" />} label={`Total price`}>
+        <div
+          className={`mt-6 flex items-center justify-between rounded-sm px-8 py-4
+            ${isPaid ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+        >
+          <DataItem
+            icon={<HiOutlineCurrencyDollar className="h-6 w-6 text-current" />}
+            label={`Total price`}
+          >
             {formatCurrency(totalPrice)}
 
             {hasBreakfast &&
               ` (${formatCurrency(cabinPrice)} cabin + ${formatCurrency(
-                extrasPrice
+                extrasPrice,
               )} breakfast)`}
           </DataItem>
 
-          <p className="uppercase text-sm font-semibold">{isPaid ? "Paid" : "Will pay at property"}</p>
+          <p className="text-sm font-semibold uppercase">
+            {isPaid ? "Paid" : "Will pay at property"}
+          </p>
         </div>
       </section>
 
-      <footer className="px-10 py-4 text-xs text-grey-500 text-right">
+      <footer className="text-grey-500 px-10 py-4 text-right text-xs">
         <p>Booked {format(new Date(created_at), "EEE, MMM dd yyyy, p")}</p>
       </footer>
     </section>

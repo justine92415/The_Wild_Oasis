@@ -1,9 +1,15 @@
-function DataItem({ icon, label, children }) {
+type DataItemProps = {
+  icon: React.ReactNode;
+  label: string;
+  children: React.ReactNode;
+};
+
+export function DataItem({ icon, label, children }: DataItemProps) {
   return (
-    <div className="flex items-center gap-6 py-3">
-      <span className="flex items-center gap-3 font-medium">
-        <span className="h-8 w-8 text-indigo-600">{icon}</span>
-        {label}
+    <div className="flex items-center gap-4">
+      <span className="flex items-center gap-2 font-medium">
+        {icon}
+        <span>{label}</span>
       </span>
       {children}
     </div>
