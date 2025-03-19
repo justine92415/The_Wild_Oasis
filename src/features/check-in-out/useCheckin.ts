@@ -33,7 +33,7 @@ export function useCheckin() {
     },
 
     onError: () => {
-      toast.error("Failed to check in booking");
+      toast.error("There was an error while checking in");
     },
   });
 
