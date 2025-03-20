@@ -3,8 +3,7 @@ import React from "react";
 type FormProps = {
   type?: "modal" | "non-modal";
   children: React.ReactNode;
-  onSubmit?: () => void;
-};
+} & React.FormHTMLAttributes<HTMLFormElement>;
 
 function Form({ type = "modal", children, onSubmit }: FormProps) {
   // 根據條件組合不同的類名

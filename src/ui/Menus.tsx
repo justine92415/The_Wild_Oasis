@@ -35,7 +35,7 @@ type ButtonProps = {
   children: ReactNode;
   onClick?: () => void;
   icon: ReactNode;
-};
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 // Create context for menu functionality
 const MenusContext = createContext<MenusContextType>({
@@ -121,7 +121,7 @@ function List({ id, children }: ListProps) {
   );
 }
 
-function Button({ children, icon, onClick }: ButtonProps) {
+function Button({ children, icon, onClick, disabled }: ButtonProps) {
   const { close } = useContext<MenusContextType>(MenusContext);
   
   function handleClick() {
@@ -136,6 +136,7 @@ function Button({ children, icon, onClick }: ButtonProps) {
           bg-transparent px-6 py-3 text-left text-sm transition-all duration-200
           [&>svg]:h-3 [&>svg]:w-3 [&>svg]:transition-all [&>svg]:duration-300"
         onClick={handleClick}
+        disabled={disabled}
       >
         {icon}
         <span>{children}</span>

@@ -1,8 +1,11 @@
-import styled from "styled-components";
+import { ImgHTMLAttributes } from "react";
 
-export const Flag = styled.img`
-  max-width: 2rem;
-  border-radius: var(--border-radius-tiny);
-  display: block;
-  border: 1px solid var(--color-grey-100);
-`;
+export function Flag({ src, alt }: ImgHTMLAttributes<HTMLImageElement>) {
+  return (
+    <img
+      className="rounded-tiny border-grey-100 block max-w-5 border border-solid"
+      src={src}
+      alt={alt}
+    />
+  );
+}

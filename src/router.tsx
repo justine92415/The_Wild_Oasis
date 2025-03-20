@@ -8,10 +8,17 @@ import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
 import AppLayout from "./ui/AppLayout";
+import Booking from "./pages/Booking";
+import Checkin from "./pages/Checkin";
+import ProtectedRoute from "./ui/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
-    element: <AppLayout />,
+    element: (
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <PageNotFound />,
     children: [
       {
@@ -25,6 +32,14 @@ const router = createBrowserRouter([
       {
         path: "/bookings",
         element: <Bookings />,
+      },
+      {
+        path: "/bookings/:bookingId",
+        element: <Booking />,
+      },
+      {
+        path: "/checkin/:bookingId",
+        element: <Checkin />,
       },
       {
         path: "/cabins",
@@ -42,15 +57,16 @@ const router = createBrowserRouter([
         path: "/account",
         element: <Account />,
       },
-      {
-        path: "/login",
-        element: <Login />,
-      },
+
       {
         path: "*",
         element: <PageNotFound />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 

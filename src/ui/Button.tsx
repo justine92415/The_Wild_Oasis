@@ -5,6 +5,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   variation?: ButtonVariation;
   children: React.ReactNode;
+  icon?: React.ReactNode;
   onClick?: (...args: any) => void;
 }
 
@@ -14,6 +15,7 @@ function Button({
   onClick,
   children,
   type = "submit",
+  disabled
 }: ButtonProps) {
   // 基礎樣式（適用於所有按鈕）
   const baseStyles = "rounded-sm shadow-sm";
@@ -36,7 +38,7 @@ function Button({
   const buttonClasses = `${baseStyles} ${sizeStyles[size]} ${variationStyles[variation]}`;
 
   return (
-    <button type={type} onClick={onClick} className={buttonClasses}>
+    <button type={type} onClick={onClick} className={buttonClasses} disabled={disabled}>
       {children}
     </button>
   );

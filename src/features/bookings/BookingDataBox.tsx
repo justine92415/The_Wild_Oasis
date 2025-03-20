@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { format, isToday } from "date-fns";
 import {
   HiOutlineChatBubbleBottomCenterText,
@@ -8,101 +7,38 @@ import {
 } from "react-icons/hi2";
 
 import DataItem from "../../ui/DataItem";
-import { Flag } from "../../ui/Flag";
 
 import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import { Flag } from "../../ui/Flag";
 
-const StyledBookingDataBox = styled.section`
-  /* Box */
-  background-color: var(--color-grey-0);
-  border: 1px solid var(--color-grey-100);
-  border-radius: var(--border-radius-md);
-
-  overflow: hidden;
-`;
-
-const Header = styled.header`
-  background-color: var(--color-brand-500);
-  padding: 2rem 4rem;
-  color: #e0e7ff;
-  font-size: 1.8rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  svg {
-    height: 3.2rem;
-    width: 3.2rem;
-  }
-
-  & div:first-child {
-    display: flex;
-    align-items: center;
-    gap: 1.6rem;
-    font-weight: 600;
-    font-size: 1.8rem;
-  }
-
-  & span {
-    font-family: "Sono";
-    font-size: 2rem;
-    margin-left: 4px;
-  }
-`;
-
-const Section = styled.section`
-  padding: 3.2rem 4rem 1.2rem;
-`;
-
-const Guest = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 1.6rem;
-  color: var(--color-grey-500);
-
-  & p:first-of-type {
-    font-weight: 500;
-    color: var(--color-grey-700);
-  }
-`;
-
-const Price = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.6rem 3.2rem;
-  border-radius: var(--border-radius-sm);
-  margin-top: 2.4rem;
-
-  background-color: ${(props) =>
-    props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
-  color: ${(props) =>
-    props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
-
-  & p:last-child {
-    text-transform: uppercase;
-    font-size: 1.4rem;
-    font-weight: 600;
-  }
-
-  svg {
-    height: 2.4rem;
-    width: 2.4rem;
-    color: currentColor !important;
-  }
-`;
-
-const Footer = styled.footer`
-  padding: 1.6rem 4rem;
-  font-size: 1.2rem;
-  color: var(--color-grey-500);
-  text-align: right;
-`;
+export type BookingDataBoxProps = {
+  booking: {
+    created_at: string;
+    startDate: string;
+    endDate: string;
+    numNights: number;
+    numGuests: number;
+    cabinPrice: number;
+    extrasPrice: number;
+    totalPrice: number;
+    hasBreakfast: boolean;
+    observations: string;
+    isPaid: boolean;
+    guests: {
+      fullName: string;
+      email: string;
+      country: string;
+      countryFlag: string;
+      nationalID: string;
+    };
+    cabins: {
+      name: string;
+    };
+  };
+};
 
 // A purely presentational component
-function BookingDataBox({ booking }) {
+function BookingDataBox({ booking }: BookingDataBoxProps) {
   const {
     created_at,
     startDate,
@@ -120,12 +56,16 @@ function BookingDataBox({ booking }) {
   } = booking;
 
   return (
-    <StyledBookingDataBox>
-      <Header>
-        <div>
-          <HiOutlineHomeModern />
+    <section className="bg-grey-0 border-grey-100 overflow-hidden rounded-md border">
+      <header
+        className="bg-brand-500 flex items-center justify-between px-10 py-5 text-lg font-medium
+          text-indigo-100"
+      >
+        <div className="flex items-center gap-4 text-lg font-semibold">
+          <HiOutlineHomeModern className="h-8 w-8" />
           <p>
-            {numNights} nights in Cabin <span>{cabinName}</span>
+            {numNights} nights in Cabin{" "}
+            <span className="font-sono ml-1 text-xl">{cabinName}</span>
           </p>
         </div>
 
@@ -136,19 +76,19 @@ function BookingDataBox({ booking }) {
             : formatDistanceFromNow(startDate)}
           ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
         </p>
-      </Header>
+      </header>
 
-      <Section>
-        <Guest>
+      <section className="px-10 pt-8 pb-3">
+        <div className="text-grey-500 mb-4 flex items-center gap-3">
           {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
-          <p>
+          <p className="text-grey-700 font-medium">
             {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
           </p>
           <span>&bull;</span>
           <p>{email}</p>
           <span>&bull;</span>
           <p>National ID {nationalID}</p>
-        </Guest>
+        </div>
 
         {observations && (
           <DataItem
@@ -159,28 +99,39 @@ function BookingDataBox({ booking }) {
           </DataItem>
         )}
 
-        <DataItem icon={<HiOutlineCheckCircle />} label="Breakfast included?">
+        <DataItem
+          icon={<HiOutlineCheckCircle className="text-brand-600 h-5 w-5" />}
+          label="Breakfast included?"
+        >
           {hasBreakfast ? "Yes" : "No"}
         </DataItem>
 
-        <Price isPaid={isPaid}>
-          <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
+        <div
+          className={`mt-6 flex items-center justify-between rounded-sm px-8 py-4
+            ${isPaid ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}
+        >
+          <DataItem
+            icon={<HiOutlineCurrencyDollar className="h-6 w-6 text-current" />}
+            label={`Total price`}
+          >
             {formatCurrency(totalPrice)}
 
             {hasBreakfast &&
               ` (${formatCurrency(cabinPrice)} cabin + ${formatCurrency(
-                extrasPrice
+                extrasPrice,
               )} breakfast)`}
           </DataItem>
 
-          <p>{isPaid ? "Paid" : "Will pay at property"}</p>
-        </Price>
-      </Section>
+          <p className="text-sm font-semibold uppercase">
+            {isPaid ? "Paid" : "Will pay at property"}
+          </p>
+        </div>
+      </section>
 
-      <Footer>
+      <footer className="text-grey-500 px-10 py-4 text-right text-xs">
         <p>Booked {format(new Date(created_at), "EEE, MMM dd yyyy, p")}</p>
-      </Footer>
-    </StyledBookingDataBox>
+      </footer>
+    </section>
   );
 }
 

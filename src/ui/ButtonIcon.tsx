@@ -1,21 +1,16 @@
-import styled from "styled-components";
+import { ButtonHTMLAttributes } from "react";
 
-const ButtonIcon = styled.button`
-  background: none;
-  border: none;
-  padding: 0.6rem;
-  border-radius: var(--border-radius-sm);
-  transition: all 0.2s;
+type ButtonIconProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-  &:hover {
-    background-color: var(--color-grey-100);
-  }
-
-  & svg {
-    width: 2.2rem;
-    height: 2.2rem;
-    color: var(--color-brand-600);
-  }
-`;
+function ButtonIcon({ children, className, ...props }: ButtonIconProps) {
+  return (
+    <button 
+      className={`bg-transparent border-none p-2 rounded-sm transition-all duration-200 hover:bg-gray-100 ${className || ""}`} 
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
 
 export default ButtonIcon;

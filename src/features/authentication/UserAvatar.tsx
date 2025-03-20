@@ -1,21 +1,20 @@
-import styled from "styled-components";
+type UserAvatarProps = {
+  src: string;
+  alt: string;
+  username: string;
+};
 
-const StyledUserAvatar = styled.div`
-  display: flex;
-  gap: 1.2rem;
-  align-items: center;
-  font-weight: 500;
-  font-size: 1.4rem;
-  color: var(--color-grey-600);
-`;
+function UserAvatar({ src, alt, username }: UserAvatarProps) {
+  return (
+    <div className="flex gap-3 items-center font-medium text-sm text-grey-600">
+      <img 
+        className="block w-10 aspect-square object-cover object-center rounded-full outline-2 outline outline-grey-100" 
+        src={src} 
+        alt={alt} 
+      />
+      <span>{username}</span>
+    </div>
+  );
+}
 
-const Avatar = styled.img`
-  display: block;
-  width: 4rem;
-  width: 3.6rem;
-  aspect-ratio: 1;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 50%;
-  outline: 2px solid var(--color-grey-100);
-`;
+export default UserAvatar;

@@ -4,7 +4,7 @@ import Heading from "./Heading";
 type ConfirmDeleteProps = {
   resourceName: string;
   onConfirm: () => void;
-  disabled: boolean;
+  disabled?: boolean;
   // pass from Modal
   onCloseModal?: () => void;
 };
