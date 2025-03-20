@@ -40,7 +40,7 @@ function MainNav() {
           </NavLink>
         </li>
         <li>
-          <NavLink className={navLinkStyle} to="/qq">
+          <NavLink className={navLinkStyle} to="/settings">
             <HiOutlineCog6Tooth className={iconStyle} />
             <span>Settings</span>
           </NavLink>
