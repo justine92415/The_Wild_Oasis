@@ -10,7 +10,7 @@ import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 
 function CabinRow({ cabin }: { cabin: Cabin }) {
-  const { isCreating, createCabin } = useCreateCabin();
+  const { createCabin } = useCreateCabin();
   const { isDeleting, deleteCabin } = useDeleteCabin();
 
   const {

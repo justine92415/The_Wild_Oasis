@@ -15,7 +15,7 @@ export function useEditCabin() {
         queryKey: ["cabins"],
       });
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Error updating cabin");
     },
   });

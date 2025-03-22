@@ -13,7 +13,7 @@ export function useEditSetting() {
         queryKey: ["settings"],
       });
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Error updating cabin");
     },
   });

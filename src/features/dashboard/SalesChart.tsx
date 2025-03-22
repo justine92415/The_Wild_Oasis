@@ -52,7 +52,7 @@ function SalesChart() {
   return (
     <div className="col-span-full [&_.recharts-cartesian-grid-horizontal_line]:stroke-grey-300 [&_.recharts-cartesian-grid-vertical_line]:stroke-grey-300">
       <DashboardBox>
-        {/* 圖表內容將在此處 */}
+        <p>圖表放置區</p>
       </DashboardBox>
     </div>
   );

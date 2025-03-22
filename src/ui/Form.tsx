@@ -5,7 +5,7 @@ type FormProps = {
   children: React.ReactNode;
 } & React.FormHTMLAttributes<HTMLFormElement>;
 
-function Form({ type = "modal", children, onSubmit }: FormProps) {
+function Form({ type = "modal", children, onSubmit, noValidate }: FormProps) {
   // 根據條件組合不同的類名
   const baseClasses = "overflow-hidden text-sm";
   const nonModalClasses =
@@ -17,7 +17,7 @@ function Form({ type = "modal", children, onSubmit }: FormProps) {
   const combinedClasses = `${baseClasses} ${nonModalClasses} ${modalClasses}`;
 
   return (
-    <form onSubmit={onSubmit} className={combinedClasses}>
+    <form onSubmit={onSubmit} className={combinedClasses} noValidate={noValidate}>
       {children}
     </form>
   );

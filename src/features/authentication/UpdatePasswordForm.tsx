@@ -3,17 +3,22 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
-
 import { useUpdateUser } from "./useUpdateUser";
 
+type UpdatePasswordFormData = {
+  password: string;
+  passwordConfirm: string;
+};
+
 function UpdatePasswordForm() {
-  const { register, handleSubmit, formState, getValues, reset } = useForm();
+  const { register, handleSubmit, formState, getValues, reset } =
+    useForm<UpdatePasswordFormData>();
   const { errors } = formState;
 
   const { updateUser, isUpdating } = useUpdateUser();
 
-  function onSubmit({ password }) {
-    updateUser({ password }, { onSuccess: reset });
+  function onSubmit({ password }: UpdatePasswordFormData) {
+    updateUser({ password }, { onSuccess: () => reset() });
   }
 
   return (
@@ -53,12 +58,12 @@ function UpdatePasswordForm() {
           })}
         />
       </FormRow>
-      <FormRow>
+      <div className="flex justify-end">
         <Button onClick={reset} type="reset" variation="secondary">
           Cancel
         </Button>
         <Button disabled={isUpdating}>Update password</Button>
-      </FormRow>
+      </div>
     </Form>
   );
 }
