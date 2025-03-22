@@ -8,11 +8,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createEditCabin } from "../../services/apiCabins";
 import toast from "react-hot-toast";
 import FormRow from "../../ui/FormRow";
-import { Cabin } from "../../types";
-
-type CreateCabinFormProps = {
-  cabinToEdit?: Cabin;
-}
 
 export type CabinForm = {
   name: string;
@@ -40,7 +35,7 @@ function CreateCabinForm() {
       });
       reset();
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Error creating new cabin");
     },
   });

@@ -7,21 +7,36 @@ import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 
 import { useUser } from "./useUser";
+import { useUpdateUser } from "./useUpdateUser";
 
 function UpdateUserDataForm() {
   // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
-  const {
-    user: {
-      email,
-      user_metadata: { fullName: currentFullName },
-    },
-  } = useUser();
+  const { user } = useUser();
+
+  const email = user?.email || "";
+  const currentFullName = user?.user_metadata?.fullName || "";
+  const { updateUser, isUpdating } = useUpdateUser();
 
   const [fullName, setFullName] = useState(currentFullName);
-  const [avatar, setAvatar] = useState(null);
+  const [avatar, setAvatar] = useState<File | null>(null);
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    console.log("1");
+    if (!fullName) return;
+    updateUser(
+      { fullName, avatar },
+      {
+        onSuccess: () => {
+          setAvatar(null);
+        },
+      },
+    );
+  }
+
+  function handleCancel() {
+    setFullName(currentFullName);
+    setAvatar(null);
   }
 
   return (
@@ -40,16 +55,22 @@ function UpdateUserDataForm() {
       <FormRow label="Avatar image">
         <FileInput
           id="avatar"
+          type="file"
           accept="image/*"
-          onChange={(e) => setAvatar(e.target.files[0])}
+          onChange={(e) => e.target.files && setAvatar(e.target.files[0])}
         />
       </FormRow>
-      <FormRow>
-        <Button type="reset" variation="secondary">
+      <div className="flex justify-end gap-3">
+        <Button
+          type="reset"
+          variation="secondary"
+          disabled={isUpdating}
+          onClick={handleCancel}
+        >
           Cancel
         </Button>
-        <Button>Update account</Button>
-      </FormRow>
+        <Button disabled={isUpdating}>Update account</Button>
+      </div>
     </Form>
   );
 }

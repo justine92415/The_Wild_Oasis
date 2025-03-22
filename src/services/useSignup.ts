@@ -10,7 +10,6 @@ export function useSignup() {
       console.log("User signed up", user);
       toast.success("Signed up successfully");
     },
-    onError: (error) => {},
   });
 
   return { signup, isPending };
