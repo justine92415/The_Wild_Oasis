@@ -3,24 +3,42 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import { useSignup } from "../../services/useSignup";
 
 // Email regex: /\S+@\S+\.\S+/
 
+type FormData = {
+  fullName: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+};
+
 function SignupForm() {
-  const { register, formState, getValues, handleSubmit } = useForm();
+  const { signup, isPending } = useSignup();
+  const { register, formState, getValues, handleSubmit, reset } =
+    useForm<FormData>();
 
   const { errors } = formState;
 
-  function onSubmit(data: any) {
-    console.log(data);
+  function onSubmit({ fullName, email, password }: FormData) {
+    signup(
+      { fullName, email, password },
+      {
+        onSettled: () => {
+          reset();
+        },
+      },
+    );
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)} noValidate={true} >
+    <Form onSubmit={handleSubmit(onSubmit)} noValidate={true}>
       <FormRow label="Full name" error={errors.fullName?.message}>
         <Input
           type="text"
           id="fullName"
+          disabled={isPending}
           {...register("fullName", { required: "Full name is required" })}
         />
       </FormRow>
@@ -29,6 +47,7 @@ function SignupForm() {
         <Input
           type="email"
           id="email"
+          disabled={isPending}
           {...register("email", {
             required: "Email is required",
             pattern: { value: /\S+@\S+\.\S+/, message: "Email is not valid" },
@@ -36,10 +55,14 @@ function SignupForm() {
         />
       </FormRow>
 
-      <FormRow label="Password (min 8 characters)" error={errors.password?.message}>
+      <FormRow
+        label="Password (min 8 characters)"
+        error={errors.password?.message}
+      >
         <Input
           type="password"
           id="password"
+          disabled={isPending}
           {...register("password", {
             required: "Password is required",
             minLength: {
@@ -54,6 +77,7 @@ function SignupForm() {
         <Input
           type="password"
           id="passwordConfirm"
+          disabled={isPending}
           {...register("passwordConfirm", {
             required: "passwordConfirm is required",
             validate: (value) =>
@@ -67,7 +91,7 @@ function SignupForm() {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button>Create new user</Button>
+        <Button disabled={isPending}>Create new user</Button>
       </div>
     </Form>
   );
